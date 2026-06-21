@@ -1,4 +1,4 @@
-# Jay's Mission Control
+# Jay OS
 
 **INTERNAL.** Live URL: <https://javokhirai.github.io/jay-dashboard/>
 
