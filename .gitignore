@@ -12,6 +12,7 @@ node_modules/
 # staticrypt
 index.plaintext.html
 index.source.html
+*.plaintext.html
 .staticrypt.json
 encrypted/
 # build-side only — never publish (data/ held Jay's plaintext EOD reports; scripts are local build tools)
