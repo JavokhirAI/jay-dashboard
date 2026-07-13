@@ -5,7 +5,7 @@ description: Rebuild/update the encrypted strategic report page (strategy.html) 
 
 # Strategic Report (JOS Strategy Room)
 
-`strategy.html` is a standalone, staticrypt-encrypted page in this repo (published via GitHub Pages next to `index.html`). It holds Jay's executive-level strategic report: meeting screen, diagnosis, 6-month strategy gantt, venture portfolio, budget frame, problems→decisions, meeting cadence, report script, and a session log.
+The Strategy Room now lives INSIDE the main `index.html` as the "Strategy Room" tab (an isolated frame whose full document is embedded base64 in the page and rendered via srcdoc). A standalone `strategy.html` (separately encrypted) is kept as fallback. When updating, prefer regenerating the inner Strategy Room document, re-embedding it into the decrypted `index.plaintext.html` (replace the base64 payload in the `#tab-strategy` script), and re-encrypting `index.html` with the MAIN passphrase and its existing salt (`--salt <32-hex from the page>`); remind Jay to sync his Desktop staging `index.plaintext.html` so the daily routines don't revert the tab. It holds Jay's executive-level strategic report: meeting screen, diagnosis, 6-month strategy gantt, venture portfolio, budget frame, problems→decisions, meeting cadence, report script, and a session log.
 
 **The passphrase is NOT stored in this repo.** It is separate from the main JOS passphrase and is shared privately in chat. Ask Jay for it only if re-encrypting and it wasn't provided; never write it to any committed file.
 
