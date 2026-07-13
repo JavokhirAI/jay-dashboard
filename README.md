@@ -20,7 +20,7 @@ git add index.html && git commit -m "rotate passphrase" && git push
 ## Architecture
 - **Source:** `index.plaintext.html` (gitignored — rebuild from sources / restore from Jay's Desktop staging)
 - **Published:** `index.html` (encrypted)
-- **Strategy Room:** `strategy.html` (encrypted separately, own passphrase shared privately; updated via the `strategic-report` skill in `.claude/skills/`)
+- **Strategy Room:** embedded as a native tab inside `index.html` (isolated frame; updated via the `strategic-report` skill in `.claude/skills/`). Standalone `strategy.html` (separately encrypted) kept as fallback.
 - **Host:** GitHub Pages on this repo
 - **Hardening:** `robots: noindex,nofollow,noarchive` baked in pre-encryption
 
