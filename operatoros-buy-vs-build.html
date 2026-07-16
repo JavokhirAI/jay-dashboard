@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>OperatorOS — Buy vs Build · Jay · July 2026</title>
+<style>
+  :root {
+    --page:           #f9f9f7;
+    --surface-1:      #fcfcfb;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --muted:          #898781;
+    --grid:           #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --accent:         #2a78d6;
+    --accent-2:       #1baf7a;
+    --warn:           #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:           #0d0d0d;
+      --surface-1:      #1a1a19;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted:          #898781;
+      --grid:           #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --accent:         #3987e5;
+      --accent-2:       #199e70;
+      --warn:           #e66767;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    padding: 32px 16px 64px;
+  }
+  .doc { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; }
+  .kicker { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.01em; }
+  .sub { color: var(--text-secondary); margin-top: 8px; font-size: 15px; }
+  h2 { font-size: 17px; margin-bottom: 12px; letter-spacing: -0.01em; }
+  p  { color: var(--text-secondary); font-size: 14.5px; }
+  strong { color: var(--text-primary); }
+
+  .verdict { border-left: 4px solid var(--accent); }
+  .verdict p { font-size: 15px; }
+
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+  th { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  td { color: var(--text-secondary); }
+  td.cap { color: var(--text-primary); font-weight: 600; white-space: nowrap; }
+  .yes { color: var(--accent-2); font-weight: 600; }
+  .part { color: var(--text-secondary); font-weight: 600; }
+  .no { color: var(--warn); font-weight: 600; }
+  .fill { color: var(--muted); font-style: italic; }
+
+  ul.points { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  ul.points li { color: var(--text-secondary); font-size: 14.5px; padding-left: 18px; position: relative; }
+  ul.points li::before { content: ""; position: absolute; left: 0; top: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  ul.points li strong { color: var(--text-primary); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .col { border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .col h3 { font-size: 14px; margin-bottom: 8px; }
+  .col ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .col li { font-size: 13px; color: var(--text-secondary); padding-left: 14px; position: relative; }
+  .col li::before { content: ""; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+  .col.buy  li::before { background: var(--accent); }
+  .col.build li::before { background: var(--accent-2); }
+  @media (max-width: 600px) { .cols { grid-template-columns: 1fr; } }
+
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
+  .step .n { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 13px; font-weight: 650; display: flex; align-items: center; justify-content: center; }
+  .step .body { font-size: 14.5px; color: var(--text-secondary); padding-top: 2px; }
+  .step .body strong { color: var(--text-primary); }
+
+  .note { font-size: 12.5px; color: var(--muted); }
+  footer { text-align: center; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="card">
+    <div class="kicker">Buy vs build · July 2026 · Prepared for Sardor</div>
+    <h1>OperatorOS vs. what we're building in-house</h1>
+    <div class="sub">OperatorOS (operatoros.ai) is an AI automation layer for service franchises: agents for sales, recruiting, marketing, finance and comms, plugged into a CRM like ServiceTitan. That is, structurally, the same thesis as HA OS + our AI agents. This page frames the decision the way we agreed on July 8: cost, coverage, ROI.</div>
+  </header>
+
+  <section class="card verdict">
+    <h2>Recommendation (working)</h2>
+    <p><strong>Keep building the core, use them as a benchmark — and validate our thesis with their demo.</strong> OperatorOS is proof there's a market for exactly what we're building internally. Buying it would solve visibility faster but puts our operational data and workflows on someone else's platform, priced per location as we scale. The strongest play: take their demo/quote, use it as the price ceiling our internal build must beat, and treat feature gaps they reveal as our roadmap input.</p>
+  </section>
+
+  <section class="card">
+    <h2>Coverage comparison</h2>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Capability</th><th>OperatorOS (public materials)</th><th>Ours today</th><th>Gap / note</th></tr></thead>
+      <tbody>
+        <tr><td class="cap">CRM integration</td><td><span class="yes">Yes</span> — ServiceTitan-class CRMs</td><td><span class="yes">Yes</span> — native, our own stack</td><td>We own the data end-to-end</td></tr>
+        <tr><td class="cap">Sales agents</td><td><span class="yes">Yes</span> — lead scoring, proposals, job booking</td><td><span class="part">Partial</span></td><td>Their strongest module; ours in progress</td></tr>
+        <tr><td class="cap">Recruiting agents</td><td><span class="yes">Yes</span></td><td><span class="no">No</span></td><td>Candidate gap — worth copying</td></tr>
+        <tr><td class="cap">Marketing agents</td><td><span class="yes">Yes</span> — content, campaigns</td><td><span class="part">Partial</span> — via marketing team + tools</td><td></td></tr>
+        <tr><td class="cap">Finance / payroll automation</td><td><span class="yes">Yes</span></td><td><span class="part">Partial</span></td><td></td></tr>
+        <tr><td class="cap">Ops dashboards &amp; reporting</td><td><span class="yes">Yes</span> — efficiency, revenue, system health</td><td><span class="yes">Yes</span> — HA OS dashboards, AI project reports</td><td>Shawn's Kanban+AI visibility work covers this</td></tr>
+        <tr><td class="cap">Cross-brand portfolio view</td><td><span class="fill">Unknown — verify in demo</span></td><td><span class="yes">Yes</span> — built for our multi-brand structure</td><td>Our differentiator</td></tr>
+        <tr><td class="cap">Custom internal workflows</td><td><span class="part">Limited</span> — their templates</td><td><span class="yes">Yes</span> — anything we need</td><td>Vendor = their roadmap, not ours</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note" style="margin-top:10px;">Coverage based on OperatorOS public materials (features/integrations pages); to be verified in a demo.</p>
+  </section>
+
+  <section class="card">
+    <h2>Cost comparison</h2>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Line</th><th>Buy (OperatorOS)</th><th>Build (HA OS + agents)</th></tr></thead>
+      <tbody>
+        <tr><td class="cap">Platform / license</td><td class="fill">[from their pricing page — tier &amp; $/mo]</td><td>$0 — our stack</td></tr>
+        <tr><td class="cap">Implementation / integration</td><td class="fill">[setup fee + our time to integrate]</td><td>Already sunk into HA OS; incremental agent work only</td></tr>
+        <tr><td class="cap">Per-location / per-seat scaling</td><td class="fill">[×N locations as we grow]</td><td>Flat — marginal cost ≈ compute</td></tr>
+        <tr><td class="cap">Team cost to run it</td><td>Still need an owner internally</td><td>Same owner — no double spend</td></tr>
+        <tr><td class="cap">Exit cost</td><td>Data/workflow migration on cancel</td><td>None — we own it</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note" style="margin-top:10px;">Market context: mid-tier AI agent platforms with CRM integration are commonly quoted in the $500–$2,000/mo range in public pricing guides; franchise-focused, sales-led products like this typically land above that once implementation and per-location fees are included. Exact OperatorOS numbers go in the blanks after their quote/demo.</p>
+  </section>
+
+  <section class="card">
+    <h2>Buy vs build — the honest trade</h2>
+    <div class="cols">
+      <div class="col buy">
+        <h3>What buying gets us</h3>
+        <ul>
+          <li>Speed: working agents in weeks, not months</li>
+          <li>Their learning curve — patterns proven on other franchises</li>
+          <li>A recruiting module we don't have at all</li>
+          <li>Forces discipline: clean CRM data, defined workflows</li>
+        </ul>
+      </div>
+      <div class="col build">
+        <h3>Why owning it is a moat</h3>
+        <ul>
+          <li>Our operational data stays ours — the compounding asset</li>
+          <li>Custom to multi-brand HA structure, not franchise templates</li>
+          <li>No per-location tax as we scale locations and brands</li>
+          <li>Productizable: OperatorOS proves people pay for this — a venture-studio play, not just an internal tool</li>
+          <li>No vendor lock-in on core operations</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Next steps (1-week / 1-month / 3-month, per our roadmap format)</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="body"><strong>This week:</strong> book an OperatorOS demo and get a real quote (their pricing is sales-led). Fill the cost table above with actual numbers.</div></div>
+      <div class="step"><div class="n">2</div><div class="body"><strong>1 month:</strong> gap analysis from the demo → fold missing capabilities (recruiting agent first) into the HA OS roadmap with estimates and ROI, in the format we agreed on July 8.</div></div>
+      <div class="step"><div class="n">3</div><div class="body"><strong>3 months:</strong> decision checkpoint — if our build beats their quote on cost and covers the critical 80%, we stay in-house and evaluate packaging HA OS as a sellable product; if not, we buy the commodity modules and keep the core.</div></div>
+    </div>
+  </section>
+
+  <footer>Prepared by Jay · July 2026 · For internal discussion</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Compensation Proposal — Jay · July 2026</title>
+<style>
+  :root {
+    --page:           #f9f9f7;
+    --surface-1:      #fcfcfb;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --muted:          #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-base:    #2a78d6;  /* proposed base */
+    --series-bonus:   #1baf7a;  /* bonus upside */
+    --series-current: #b3b1a9;  /* current model, de-emphasized */
+    --good:           #006300;
+    --critical:       #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:           #0d0d0d;
+      --surface-1:      #1a1a19;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted:          #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-base:    #3987e5;
+      --series-bonus:   #199e70;
+      --series-current: #55544f;
+      --good:           #0ca30c;
+      --critical:       #e66767;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    padding: 32px 16px 64px;
+  }
+  .doc { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+  }
+  header.card { padding: 28px; }
+  .kicker { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.01em; }
+  .sub { color: var(--text-secondary); margin-top: 8px; font-size: 15px; }
+  h2 { font-size: 17px; margin-bottom: 12px; letter-spacing: -0.01em; }
+  p  { color: var(--text-secondary); font-size: 14.5px; }
+  p + p { margin-top: 8px; }
+  strong { color: var(--text-primary); }
+
+  /* Stat tiles */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tile {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .tile .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .tile .value { font-size: 26px; font-weight: 650; letter-spacing: -0.01em; }
+  .tile .note  { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .tile .value.bad { color: var(--critical); }
+  @media (max-width: 560px) { .tiles { grid-template-columns: 1fr; } }
+
+  ul.points { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  ul.points li { color: var(--text-secondary); font-size: 14.5px; padding-left: 18px; position: relative; }
+  ul.points li::before { content: ""; position: absolute; left: 0; top: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--series-base); }
+  ul.points li strong { color: var(--text-primary); }
+
+  /* Scope grid */
+  .scope { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .scope-item { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .scope-item .t { font-size: 13.5px; font-weight: 600; }
+  .scope-item .d { font-size: 12.5px; color: var(--text-secondary); margin-top: 2px; }
+  @media (max-width: 560px) { .scope { grid-template-columns: 1fr; } }
+
+  /* Chart */
+  .chart { margin-top: 6px; }
+  .chart-title { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
+  .row { display: grid; grid-template-columns: 130px 1fr; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .row .name { font-size: 13px; color: var(--text-secondary); text-align: right; }
+  .row .name strong { color: var(--text-primary); font-weight: 600; }
+  .track { position: relative; height: 26px; }
+  .bar {
+    position: absolute; top: 0; height: 26px;
+    border-radius: 0 4px 4px 0;
+    display: flex; align-items: center;
+  }
+  .bar.seg { border-radius: 0; }
+  .bar.seg-end { border-radius: 0 4px 4px 0; }
+  .bar-label {
+    position: absolute; top: 3px; font-size: 12px; font-weight: 600;
+    color: var(--text-primary); white-space: nowrap;
+  }
+  .bar-label.inside { color: #fff; }
+  .axis { display: grid; grid-template-columns: 130px 1fr; gap: 12px; margin-top: 4px; }
+  .axis .scale { position: relative; height: 16px; border-top: 1px solid var(--baseline); font-size: 11px; color: var(--muted); }
+  .axis .scale span { position: absolute; top: 2px; transform: translateX(-50%); }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px; font-size: 12.5px; color: var(--text-secondary); }
+  .legend .key { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  .terms { display: flex; flex-direction: column; gap: 12px; }
+  .term { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
+  .term .n {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--series-base); color: #fff;
+    font-size: 13px; font-weight: 650;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .term .body { font-size: 14.5px; color: var(--text-secondary); padding-top: 2px; }
+  .term .body strong { color: var(--text-primary); }
+
+  footer { text-align: center; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="card">
+    <div class="kicker">Compensation proposal · July 2026 · Prepared for Alina</div>
+    <h1>A fixed base that matches the actual role</h1>
+    <div class="sub">Jay (Javokhir) — IT, operations &amp; team coordination. The 3-month trial period is complete. This is the fixed rate you asked me to name, with the reasoning behind it on one page.</div>
+  </header>
+
+  <div class="tiles">
+    <div class="tile">
+      <div class="label">Trial period</div>
+      <div class="value">3 months</div>
+      <div class="note">Completed</div>
+    </div>
+    <div class="tile">
+      <div class="label">KPI bonus, last 2 months</div>
+      <div class="value bad">$0</div>
+      <div class="note">vs $2,000 in month 3, when I owned a concrete task</div>
+    </div>
+    <div class="tile">
+      <div class="label">Effective monthly pay</div>
+      <div class="value">$2,000</div>
+      <div class="note">The contractual minimum, every month</div>
+    </div>
+  </div>
+
+  <section class="card">
+    <h2>Why the current model doesn't work</h2>
+    <ul class="points">
+      <li><strong>The model works only when a task depends on me alone — and it proved it.</strong> In month 3 of the trial I had a concrete task I fully owned, the KPI worked, and it paid $2,000. That month I earned $4,000 total.</li>
+      <li><strong>Since then, the KPI depends on factors outside my control.</strong> My role shifted to cross-team coordination and management — there is no longer a project that depends only on me. The savings-based bonus is tied to decisions, approvals and timelines owned by other teams, and for two months in a row it has paid $0 regardless of my own work.</li>
+      <li><strong>In practice, variable pay has become no pay.</strong> The real compensation is simply the $2,000 floor — for a role that has grown far beyond what that floor was set for.</li>
+      <li><strong>The base was priced for a different job.</strong> $2,000 was set for a coordinator. What the company actually gets is someone running IT operations, managing people, and working directly with core — business, finance, marketing and management, not ticket execution.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>What the role actually covers today</h2>
+    <div class="scope">
+      <div class="scope-item" style="grid-column: 1 / -1;"><div class="t">Project portfolio management</div><div class="d">Inventory &amp; prioritization of ~50 projects, WIP limits, restructured leadership reporting cadence</div></div>
+      <div class="scope-item"><div class="t">IT &amp; operations coordination</div><div class="d">Cross-team coordination with core; processes, tooling and reporting</div></div>
+      <div class="scope-item"><div class="t">People management</div><div class="d">Hiring, trial-period evaluation and day-to-day management of developers</div></div>
+      <div class="scope-item"><div class="t">Business &amp; finance context</div><div class="d">Cost/savings analysis, vendor and tooling decisions, invoicing &amp; payment flows</div></div>
+      <div class="scope-item"><div class="t">Marketing &amp; growth support</div><div class="d">Involvement in marketing initiatives for the venture studios and personal brand</div></div>
+      <div class="scope-item"><div class="t">Executive support</div><div class="d">Access management, accounts and direct support for leadership</div></div>
+      <div class="scope-item"><div class="t">Product/process delivery</div><div class="d">Hands-on support of internal systems (e.g. Trade OS) and process implementation</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Current vs. proposed compensation</h2>
+    <div class="chart" aria-label="Bar chart comparing monthly compensation: the last two months at 2,000 dollars with zero KPI, versus the proposed 3,500 dollar base plus bonus upside.">
+      <div class="chart-title">Monthly compensation, USD</div>
+
+      <!-- scale: $4,500 = 100% -->
+      <div class="row">
+        <div class="name">Trial month 3<br><span style="font-size:11px;">owned a concrete task</span></div>
+        <div class="track">
+          <div class="bar seg" style="left:0; width:44.4%; background:var(--series-current);"></div>
+          <div class="bar seg-end" style="left:calc(44.4% + 2px); width:44.4%; background:var(--series-bonus);"></div>
+          <div class="bar-label" style="left:calc(88.9% + 8px);">$4,000</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="name">Last 2 months<br><span style="font-size:11px;">no owned project</span></div>
+        <div class="track">
+          <div class="bar" style="left:0; width:44.4%; background:var(--series-current);"></div>
+          <div class="bar-label" style="left:calc(44.4% + 8px);">$2,000 · KPI $0</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="name"><strong>Proposed</strong></div>
+        <div class="track">
+          <div class="bar seg" style="left:0; width:77.8%; background:var(--series-base);"></div>
+          <div class="bar-label inside" style="left:10px;">$3,500 base</div>
+          <div class="bar seg-end" style="left:calc(77.8% + 2px); width:14%; background:var(--series-bonus);"></div>
+          <div class="bar-label" style="left:calc(93% + 6px);">+ KPI</div>
+        </div>
+      </div>
+
+      <div class="axis">
+        <div></div>
+        <div class="scale">
+          <span style="left:0; transform:none;">$0</span>
+          <span style="left:22.2%;">$1,000</span>
+          <span style="left:44.4%;">$2,000</span>
+          <span style="left:66.7%;">$3,000</span>
+          <span style="left:88.9%;">$4,000</span>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="key"><span class="swatch" style="background:var(--series-current);"></span>Current $2,000 base</span>
+        <span class="key"><span class="swatch" style="background:var(--series-base);"></span>Proposed fixed base</span>
+        <span class="key"><span class="swatch" style="background:var(--series-bonus);"></span>KPI bonus (savings / OKR)</span>
+      </div>
+      <p style="margin-top:12px; font-size:13px;">Note: the proposed $3,500 base is still below the $4,000/month the current model itself paid in the one month it actually worked.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The proposal</h2>
+    <div class="terms">
+      <div class="term">
+        <div class="n">1</div>
+        <div class="body"><strong>Fixed base: $3,500/month, starting with the next pay cycle.</strong> This is the minimum that reflects the actual scope of the role — and it is still less than the $4,000 the current model paid in the one month it worked. It is not a negotiation opener; it is the condition for me to continue.</div>
+      </div>
+      <div class="term">
+        <div class="n">2</div>
+        <div class="body"><strong>KPI/OKR bonus on top of the base, not instead of it.</strong> I fully support the monthly savings framework you proposed — as genuine upside for measurable, directly attributable savings or revenue. Variable pay should reward outcomes, not subsidize the base.</div>
+      </div>
+      <div class="term">
+        <div class="n">3</div>
+        <div class="body"><strong>I deliver the quarterly savings plan once the base is agreed.</strong> A concrete plan of where IT coordination and process implementation can save or make money next quarter — the input you asked for to build the OKR structure with Sardor and Ivana.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>What the company gets</h2>
+    <ul class="points">
+      <li><strong>One accountable owner</strong> for IT operations, team management and internal systems — instead of splitting this across several hires.</li>
+      <li><strong>A working bonus structure.</strong> With the base fixed fairly, the savings KPI becomes a real incentive I will actively drive, not a broken formula that pays $0.</li>
+      <li><strong>Continuity.</strong> Three months of context, access, team relationships and process knowledge stay in the company and keep compounding.</li>
+    </ul>
+  </section>
+
+  <footer>Prepared by Jay · July 2026 · For internal discussion</footer>
+
+</div>
+</body>
+</html>
