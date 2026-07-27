@@ -18,3 +18,8 @@ encrypted/
 # build-side only — never publish (data/ held Jay's plaintext EOD reports; scripts are local build tools)
 data/
 scripts/
+
+# jos file registry — only the encrypted blob is published
+files/registry.json
+files/*.plaintext.json
+jos-files.md

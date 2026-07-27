@@ -17,6 +17,27 @@ git add index.html && git commit -m "rotate passphrase" && git push
 # then update the -p "..." value in both scheduled-task SKILL.md files
 ```
 
+## File registry (`files.html`)
+
+Every artifact produced in a Claude session — HTML pages, Word docs, PDFs, decks,
+sheets, published artifact links — is registered automatically and listed at
+`/files.html`, each with a live link where one exists and its absolute location
+where it doesn't.
+
+- `files/registry.enc.json` — the registry, AES-256-GCM under a PBKDF2-SHA256
+  600k key derived from the **main JOS passphrase**. Only the encrypted blob is
+  ever committed; `files.html` decrypts it in the browser.
+- `tools/hooks/capture-file.mjs` (`PostToolUse`) queues artifacts as they are
+  written; `tools/hooks/flush-files.mjs` (`Stop`) merges the queue into the
+  registry once per turn and pushes only that one file straight to `main`.
+- `tools/jos-files.mjs` — CLI for manual entries, the sweep safety net, listing,
+  a Markdown digest for the second brain, and installing the hooks elsewhere.
+
+**Setup:** the tooling reads the passphrase from `JOS_PASSPHRASE` in the
+environment — set it in the Claude Code web environment and in the local shell
+profile. Without it, captured entries are parked rather than written. Details and
+troubleshooting live in the `jos-file-registry` skill in `.claude/skills/`.
+
 ## Architecture
 - **Source:** `index.plaintext.html` (gitignored — rebuild from sources / restore from Jay's Desktop staging)
 - **Published:** `index.html` (encrypted)
