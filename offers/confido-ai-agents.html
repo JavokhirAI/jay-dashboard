@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="uz" data-l="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="color-scheme" content="light dark">
+<title>Confido AI-agentlar taklifi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{
+  --paper:#F1F4F2; --surface:#FFFFFF; --surface2:#E9EEEB;
+  --ink:#111C18; --ink2:#33443D; --muted:#5E6E68; --line:#D2DBD6; --line2:#BFCBC5;
+  --accent:#0B6B57; --accent-soft:#E1EFEA; --brass:#8C6410; --brass-soft:#F5EBD8;
+  --alert:#9E3327; --alert-soft:#F7E5E2;
+  --shadow:0 1px 2px rgba(17,28,24,.06),0 8px 24px -16px rgba(17,28,24,.35);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0B1210; --surface:#121A17; --surface2:#18231F;
+    --ink:#E5EBE8; --ink2:#C2CFC9; --muted:#8CA099; --line:#25332D; --line2:#33453D;
+    --accent:#45C4A1; --accent-soft:#122A24; --brass:#D2A44E; --brass-soft:#2A2214;
+    --alert:#E2857A; --alert-soft:#2E1B18;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0B1210; --surface:#121A17; --surface2:#18231F;
+  --ink:#E5EBE8; --ink2:#C2CFC9; --muted:#8CA099; --line:#25332D; --line2:#33453D;
+  --accent:#45C4A1; --accent-soft:#122A24; --brass:#D2A44E; --brass-soft:#2A2214;
+  --alert:#E2857A; --alert-soft:#2E1B18;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Golos Text","Segoe UI",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+.doc{max-width:860px;margin:0 auto;padding:0 20px 96px}
+p{margin:0 0 .9em}
+p.prose,li.prose,.prose p{font-family:"PT Serif",Georgia,serif;color:var(--ink2);line-height:1.68}
+strong{font-weight:600;color:var(--ink)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- language switch ---------- */
+.ru{display:none}
+[data-l="ru"] .ru{display:revert}
+[data-l="ru"] .uz{display:none}
+
+/* ---------- sticky bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:20;background:var(--paper);background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.bar-in{max-width:860px;margin:0 auto;padding:9px 20px;display:flex;align-items:center;gap:14px}
+.mark{font-weight:700;letter-spacing:.14em;font-size:11px;text-transform:uppercase;color:var(--muted)}
+.bar-total{margin-left:auto;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.bar-total b{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink);font-weight:600}
+.lang{display:flex;border:1px solid var(--line2);border-radius:999px;overflow:hidden}
+.lang button{
+  font:600 11px/1 "Golos Text",sans-serif;letter-spacing:.1em;padding:7px 11px;
+  background:transparent;color:var(--muted);border:0;cursor:pointer;
+}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+
+/* ---------- masthead ---------- */
+header.mast{padding:56px 0 30px;border-bottom:2px solid var(--ink)}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:18px;
+}
+h1{
+  font-size:clamp(30px,5.4vw,46px);line-height:1.08;margin:0 0 14px;font-weight:700;
+  letter-spacing:-.022em;text-wrap:balance;
+}
+.lede{font-family:"PT Serif",Georgia,serif;font-size:18px;color:var(--ink2);max-width:60ch;margin:0}
+.mast-meta{
+  margin-top:26px;display:flex;flex-wrap:wrap;gap:6px 28px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
+}
+.mast-meta b{color:var(--ink);font-weight:500}
+
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  border:1px solid var(--line);border-radius:4px;background:var(--surface);margin:26px 0 0;overflow:hidden;
+}
+.stat{padding:16px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .k{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stat .v{font-family:"IBM Plex Mono",monospace;font-size:25px;font-weight:600;letter-spacing:-.02em;margin-top:5px}
+.stat.hero .v{color:var(--accent)}
+
+/* ---------- sections ---------- */
+section{padding-top:46px}
+h2{
+  font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin:0 0 6px;display:flex;align-items:baseline;gap:10px;
+}
+h2 .idx{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600}
+h3.head{font-size:24px;line-height:1.22;margin:0 0 16px;font-weight:600;letter-spacing:-.015em;text-wrap:balance}
+
+/* ---------- agent cards ---------- */
+.agents{display:grid;gap:14px}
+.agent{
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:20px 22px;box-shadow:var(--shadow);
+}
+.agent.bonus{border-color:var(--brass);background:linear-gradient(180deg,var(--brass-soft),var(--surface) 55%)}
+.agent-top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.agent-top .tag{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--surface);background:var(--accent);padding:3px 8px;border-radius:3px;font-weight:500;
+}
+.agent.bonus .tag{background:var(--brass)}
+.agent-top h4{margin:0;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.agent-top .hrs{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted)}
+.agent ul{margin:0;padding-left:0;list-style:none;display:grid;gap:7px}
+.agent li{position:relative;padding-left:20px;font-size:15px;color:var(--ink2)}
+.agent li::before{
+  content:"";position:absolute;left:4px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--accent);
+}
+.agent.bonus li::before{background:var(--brass)}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;
+  background:var(--surface2);border-bottom:1px solid var(--line2);white-space:nowrap;
+}
+td.n,th.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td .sub{display:block;font-size:13px;color:var(--muted);margin-top:3px;line-height:1.45}
+tr.free td{background:var(--brass-soft)}
+tr.free td.n{color:var(--brass);font-weight:600}
+tr.total td{background:var(--surface2);font-weight:700;border-top:1px solid var(--line2)}
+tr.total td.n{font-size:17px;color:var(--accent)}
+td .strike{text-decoration:line-through;color:var(--muted);font-weight:400;margin-right:6px}
+.phase-i{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;font-size:13px}
+
+/* ---------- add-ons ---------- */
+.addons{display:grid;gap:8px;margin-top:14px}
+.addon{
+  display:flex;gap:13px;align-items:flex-start;padding:13px 16px;background:var(--surface);
+  border:1px solid var(--line);border-radius:4px;cursor:pointer;transition:border-color .15s,background .15s;
+}
+.addon:hover{border-color:var(--line2)}
+.addon:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.addon input{width:17px;height:17px;margin:3px 0 0;accent-color:var(--accent);flex:none;cursor:pointer}
+.addon .t{font-weight:500;font-size:15px}
+.addon .d{font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+.addon .p{margin-left:auto;text-align:right;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);white-space:nowrap;padding-left:10px}
+.addon .p b{display:block;color:var(--ink);font-size:15px;font-weight:600}
+.addsum{
+  margin-top:12px;padding:13px 16px;border:1px dashed var(--line2);border-radius:4px;
+  display:flex;align-items:baseline;gap:12px;font-size:14px;color:var(--muted);
+}
+.addsum b{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--ink);font-weight:600}
+
+/* ---------- timeline ---------- */
+.gantt{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:18px 18px 14px;box-shadow:var(--shadow);overflow-x:auto}
+.gantt-in{min-width:560px}
+.gantt-head,.gantt-row{display:grid;grid-template-columns:170px repeat(8,1fr);align-items:center;gap:0}
+.gantt-head div{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);text-align:center;
+  padding-bottom:8px;border-bottom:1px solid var(--line);
+}
+.gantt-head div:first-child{text-align:left;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.gantt-row{border-bottom:1px solid var(--line);min-height:40px}
+.gantt-row:last-child{border-bottom:0}
+.gantt-row .lbl{font-size:13.5px;padding:9px 12px 9px 0;color:var(--ink2)}
+.gantt-row .track{grid-column:2 / span 8;display:grid;grid-template-columns:repeat(8,1fr);align-items:center;height:100%}
+.gbar{height:9px;border-radius:2px;background:var(--accent);opacity:.9}
+.gbar.soft{background:var(--brass)}
+.gbar.pale{background:var(--line2)}
+
+/* ---------- callouts / lists ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:20px 22px;box-shadow:var(--shadow)}
+.panel + .panel{margin-top:12px}
+.panel.warn{border-left:3px solid var(--alert);background:linear-gradient(90deg,var(--alert-soft),var(--surface) 40%)}
+.panel.note{border-left:3px solid var(--accent)}
+.panel h5{margin:0 0 8px;font-size:15px;font-weight:600}
+.panel p:last-child{margin-bottom:0}
+ul.plain{margin:0;padding-left:0;list-style:none;display:grid;gap:9px}
+ul.plain li{position:relative;padding-left:22px;color:var(--ink2);font-size:15px}
+ul.plain li::before{
+  content:"—";position:absolute;left:0;top:0;color:var(--accent);font-family:"IBM Plex Mono",monospace;
+}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+
+/* ---------- roi ---------- */
+.roi{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.roicell{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px 18px;box-shadow:var(--shadow)}
+.roicell .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;line-height:1.4}
+.roicell .v{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:600;margin-top:6px;letter-spacing:-.02em}
+.roicell.good .v{color:var(--accent)}
+
+/* ---------- signature ---------- */
+.sign{margin-top:46px;border-top:2px solid var(--ink);padding-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:640px){.sign{grid-template-columns:1fr}}
+.sign .who{font-size:14px;color:var(--muted);line-height:1.7}
+.sign .who b{display:block;color:var(--ink);font-size:16px;font-weight:600;margin-bottom:2px}
+.sigline{margin-top:34px;border-bottom:1px solid var(--line2);height:1px}
+.siglabel{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-top:7px}
+footer{margin-top:34px;font-size:12px;color:var(--muted);line-height:1.6}
+
+@media(max-width:600px){
+  header.mast{padding-top:36px}
+  .stat{border-right:0;border-bottom:1px solid var(--line)}
+  .stat:last-child{border-bottom:0}
+  .addon{flex-wrap:wrap}
+  .addon .p{margin-left:0;text-align:left;padding-left:30px}
+}
+@media print{
+  .bar{display:none}
+  body{background:#fff}
+  .panel,.agent,.tablewrap,.gantt,.roicell{box-shadow:none}
+  section{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <span class="mark">Confido &times; AI</span>
+    <div class="lang" role="group" aria-label="Til / Язык">
+      <button type="button" data-set="uz" aria-pressed="true">UZ</button>
+      <button type="button" data-set="ru" aria-pressed="false">RU</button>
+    </div>
+    <div class="bar-total">
+      <span class="uz">Jami</span><span class="ru">Итого</span>
+      <b id="barTotal">$9 500</b>
+    </div>
+  </div>
+</div>
+
+<div class="doc">
+
+<header class="mast">
+  <div class="eyebrow"><span class="uz">Tijorat taklifi &middot; 30.08.2026</span><span class="ru">Коммерческое предложение &middot; 30.08.2026</span></div>
+  <h1>
+    <span class="uz">Confido uchun uchta AI-agent</span>
+    <span class="ru">Три AI-агента для Confido</span>
+  </h1>
+  <p class="lede">
+    <span class="uz">Ibox bilan integratsiya: minimal qoldiqni nazorat qilib avtomatik zakup, Telegram orqali 24/7 savdo va zakazni Iboxga qoralama qilib kiritish. Ish soatbay hisoblanadi — <strong>$25/soat</strong>.</span>
+    <span class="ru">Интеграция с Ibox: контроль минимального остатка и автозакупка, продажи в Telegram 24/7 и внесение заказа в Ibox черновиком. Работа считается почасово — <strong>$25/час</strong>.</span>
+  </p>
+  <div class="mast-meta">
+    <span><span class="uz">Asos:</span><span class="ru">Основание:</span> <b>Voice 260831_013450</b></span>
+    <span><span class="uz">Amal qiladi:</span><span class="ru">Действует до:</span> <b>30.09.2026</b></span>
+    <span><span class="uz">Valyuta:</span><span class="ru">Валюта:</span> <b>USD</b></span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="k"><span class="uz">Stavka</span><span class="ru">Ставка</span></div><div class="v">$25<span style="font-size:14px;color:var(--muted)">/<span class="uz">soat</span><span class="ru">час</span></span></div></div>
+    <div class="stat"><div class="k"><span class="uz">Ish hajmi</span><span class="ru">Объём работ</span></div><div class="v" id="statHours">380 <span style="font-size:14px;color:var(--muted)"><span class="uz">soat</span><span class="ru">ч</span></span></div></div>
+    <div class="stat hero"><div class="k"><span class="uz">Loyiha narxi</span><span class="ru">Стоимость</span></div><div class="v" id="statPrice">$9 500</div></div>
+    <div class="stat"><div class="k"><span class="uz">Muddat</span><span class="ru">Срок</span></div><div class="v">8 <span style="font-size:14px;color:var(--muted)"><span class="uz">hafta</span><span class="ru">нед.</span></span></div></div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="idx">01</span><span class="uz">Vaziyat</span><span class="ru">Ситуация</span></h2>
+  <h3 class="head"><span class="uz">Bitta sotuvchi 1000 ga yaqin mijozga ulgurmayapti</span><span class="ru">Один продавец не успевает на ~1000 клиентов</span></h3>
+  <div class="panel">
+    <p class="prose">
+      <span class="uz">Uchrashuvda aytilganidek: 500 dan ortiq SKU, har biriga alohida kod; taxminan 1000 mijoz, har biriga alohida kod; 15–20 ta ta’minotchi. Butun B2B jarayon Ibox’da yuritiladi, mijozlar esa zakazni Telegram orqali yozadi. Hozir bu ishni bitta sotuvchi bajaryapti va u yetishmayapti — zakaz kechikadi, mijoz kutadi, kechqurun va dam olish kunlari zakaz umuman qabul qilinmaydi. Zakup tomonida ham minimal qoldiq qoʻlda kuzatiladi.</span>
+      <span class="ru">Как прозвучало на встрече: более 500 SKU, у каждого свой код; около 1000 клиентов, у каждого свой код; 15–20 поставщиков. Весь B2B-процесс ведётся в Ibox, а заказы клиенты пишут в Telegram. Сейчас это тянет один продавец, и его не хватает — заказы задерживаются, клиент ждёт, вечером и в выходные заказы не принимаются вовсе. На закупке минимальный остаток тоже отслеживается вручную.</span>
+    </p>
+    <p class="prose" style="margin-bottom:0">
+      <span class="uz"><strong>Taklif:</strong> ikkita ishchi agent (zakupchik va sotuvchi) Ibox bilan bogʻlanadi va shu ikki jarayonni oʻz zimmasiga oladi. Uchinchi agent — assistent (finansist/marketolog) — uchrashuvdagi kelishuvga koʻra <strong>narxga qoʻshilmaydi</strong>.</span>
+      <span class="ru"><strong>Предложение:</strong> два рабочих агента (закупщик и продавец) подключаются к Ibox и забирают на себя эти два процесса. Третий агент — ассистент (финансист/маркетолог) — по договорённости на встрече <strong>в стоимость не включается</strong>.</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="idx">02</span><span class="uz">Ish hajmi</span><span class="ru">Состав работ</span></h2>
+  <h3 class="head"><span class="uz">Nima quriladi</span><span class="ru">Что будет построено</span></h3>
+
+  <div class="agents">
+    <article class="agent">
+      <div class="agent-top">
+        <span class="tag">Agent 1</span>
+        <h4><span class="uz">Zakupchik</span><span class="ru">Закупщик</span></h4>
+        <span class="hrs num">60 <span class="uz">soat</span><span class="ru">ч</span></span>
+      </div>
+      <ul>
+        <li><span class="uz">Har bir SKU boʻyicha minimal qoldiq va zaxira normasi (masalan: tanga shokolad — zaxira 50 karobka, 10 karobka qolganda 40 karobka zakaz).</span><span class="ru">Минимальный остаток и норма запаса по каждому SKU (например: шоколадные монеты — запас 50 коробок, при остатке 10 заказать 40).</span></li>
+        <li><span class="uz">SKU ↔ taʼminotchi jadvali (15–20 taʼminotchi): kim qaysi tovarni olib keladi, qaysi raqamga yoziladi.</span><span class="ru">Таблица SKU ↔ поставщик (15–20 поставщиков): кто какой товар везёт и на какой номер писать.</span></li>
+        <li><span class="uz">Qoldiq chegaraga tushganda taʼminotchiga Telegram orqali avtomatik zakaz xabari.</span><span class="ru">При достижении порога — автоматическое сообщение-заказ поставщику в Telegram.</span></li>
+        <li><span class="uz">Tasdiqni kuzatish: javob boʻlmasa eslatma, keyin egaga eskalatsiya.</span><span class="ru">Контроль подтверждения: нет ответа — напоминание, затем эскалация владельцу.</span></li>
+        <li><span class="uz">Ikki rejim: toʻliq avtomatik yoki «yuborishdan oldin egadan tasdiq».</span><span class="ru">Два режима: полностью автоматический либо «подтверждение владельцем перед отправкой».</span></li>
+        <li><span class="uz">Kunlik digest: nima zakaz qilindi, nima kutilyapti, nima kritik.</span><span class="ru">Ежедневный дайджест: что заказано, что ожидается, что критично.</span></li>
+      </ul>
+    </article>
+
+    <article class="agent">
+      <div class="agent-top">
+        <span class="tag">Agent 2</span>
+        <h4><span class="uz">Sotuvchi</span><span class="ru">Продавец</span></h4>
+        <span class="hrs num">100 <span class="uz">soat</span><span class="ru">ч</span></span>
+      </div>
+      <ul>
+        <li><span class="uz">Alohida SIM va Telegram akkaunt ostida ishlaydi, 24/7, bir vaqtda oʻnlab mijoz bilan.</span><span class="ru">Работает на отдельной SIM и Telegram-аккаунте, 24/7, одновременно с десятками клиентов.</span></li>
+        <li><span class="uz">Mijoz kartasi: kod, qulay kunlar va soatlar (masalan, dushanba/payshanba 9:00), narx darajasi, qarz limiti (limitdan oshsa zakaz toʻxtaydi).</span><span class="ru">Карточка клиента: код, удобные дни и часы (например, пн/чт 9:00), уровень цены, лимит долга (при превышении заказ останавливается).</span></li>
+        <li><span class="uz">Yangi kelgan tovarlarni taklif qiladi, mijoz tanlaganlarining narxini yuboradi, zakazni qabul qiladi.</span><span class="ru">Предлагает новинки, отправляет цены по выбранным позициям, принимает заказ.</span></li>
+        <li><span class="uz">Zakaz Iboxga mijoz nomiga <strong>qoralama (bron zakaz)</strong> boʻlib tushadi — tasdiqni odam beradi.</span><span class="ru">Заказ попадает в Ibox на имя клиента <strong>черновиком (бронь-заказ)</strong> — подтверждает человек.</span></li>
+        <li><span class="uz">Uxlab qolgan pozitsiyalarni qaytarish: oxirgi 3 oy tarixi boʻyicha «buni muntazam olardingiz, hozir toʻxtadi» eslatmasi.</span><span class="ru">Возврат «уснувших» позиций: по истории за 3 месяца — «вы это брали регулярно, сейчас прекратили».</span></li>
+        <li><span class="uz">Narxni oʻzi oʻylab topmaydi — faqat Iboxdagi narx. Chakana narx hammaga; optom mijoz xodimga uzatiladi.</span><span class="ru">Цены не выдумывает — только из Ibox. Розница для всех; оптовый клиент передаётся сотруднику.</span></li>
+        <li><span class="uz">Har qanday chalkash holatda suhbatni odamga topshiradi.</span><span class="ru">В любой непонятной ситуации передаёт диалог человеку.</span></li>
+      </ul>
+    </article>
+
+    <article class="agent bonus">
+      <div class="agent-top">
+        <span class="tag">Agent 3 &middot; <span class="uz">BONUS</span><span class="ru">БОНУС</span></span>
+        <h4><span class="uz">Assistent — finansist va marketolog</span><span class="ru">Ассистент — финансист и маркетолог</span></h4>
+        <span class="hrs num">40 <span class="uz">soat</span><span class="ru">ч</span> &middot; $0</span>
+      </div>
+      <ul>
+        <li><span class="uz">Ertalab soʻraysiz — kechagi oborot, tushum, qarzlar boʻyicha javob beradi.</span><span class="ru">Спрашиваете утром — отвечает по вчерашнему обороту, поступлениям, долгам.</span></li>
+        <li><span class="uz">Qaysi SKU yaxshi ketyapti, qaysi biri toʻxtagan, keyingi oyga nima zakup qilish kerak.</span><span class="ru">Какие SKU идут хорошо, какие встали, что закупать на следующий месяц.</span></li>
+        <li><span class="uz">Moliyaviy va marketing nuqtai nazaridan tavsiyalar — kuchli mutaxassis mantigʻi asosida oʻqitilgan.</span><span class="ru">Рекомендации с позиции финансиста и маркетолога — обучен на логике сильного специалиста.</span></li>
+        <li><span class="uz">Maʼlumot bazasi mijozning oʻz serverida toʻplanadi va yildan-yilga qimmatlashadi.</span><span class="ru">База данных накапливается на сервере клиента и с годами становится ценнее.</span></li>
+        <li><span class="uz">Uchrashuvdagi qarorga koʻra bu agent narxga kiritilmaydi — <strong>$1 000 qiymatdagi ish bepul</strong>.</span><span class="ru">По решению на встрече агент не входит в стоимость — <strong>работа на $1 000 бесплатно</strong>.</span></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="panel note" style="margin-top:14px">
+    <h5><span class="uz">Uchalasining ostidagi umumiy platforma</span><span class="ru">Общая платформа под всеми тремя</span></h5>
+    <p class="prose" style="margin:0">
+      <span class="uz">Ibox konnektori (qoldiq, narx, mijozlar, sotuv tarixi, toʻlovlar), Telegram qatlami, qoidalar dvigateli, log va audit — har bir yuborilgan xabar va yaratilgan zakaz yozib boriladi. Hammasi cloudda ishlaydi, maʼlumot bazasi mijoz tomonida saqlanadi.</span>
+      <span class="ru">Коннектор Ibox (остатки, цены, клиенты, история продаж, платежи), слой Telegram, движок правил, логи и аудит — каждое отправленное сообщение и созданный заказ фиксируются. Всё работает в облаке, база данных хранится на стороне клиента.</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="idx">03</span><span class="uz">Soatlar va narx</span><span class="ru">Часы и стоимость</span></h2>
+  <h3 class="head"><span class="uz">$25/soat &mdash; har bir faza boʻyicha ochiq hisob</span><span class="ru">$25/час — открытый расчёт по каждой фазе</span></h3>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34px">#</th>
+          <th><span class="uz">Faza</span><span class="ru">Фаза</span></th>
+          <th class="n"><span class="uz">Soat</span><span class="ru">Часы</span></th>
+          <th class="n"><span class="uz">Summa</span><span class="ru">Сумма</span></th>
+        </tr>
+      </thead>
+      <tbody id="phaseBody"></tbody>
+    </table>
+  </div>
+  <div class="panel note" style="margin-top:12px">
+    <p class="prose" style="margin:0">
+      <span class="uz">Hisob-faktura har ikki haftada <strong>haqiqiy ishlangan soatlar</strong> boʻyicha, timesheet ilova qilinadi. Umumiy budjet <strong>380 soatdan oshmaydi</strong>: oshib ketsa — farqi bizning hisobimizdan, faqat yozma kelishilgan yangi ish qoʻshilsa alohida hisoblanadi. Boshlash uchun 30% avans ($2 850).</span>
+      <span class="ru">Счёт выставляется каждые две недели по <strong>фактически отработанным часам</strong>, с приложением таймшита. Общий бюджет <strong>не превышает 380 часов</strong>: превышение — за наш счёт, отдельно считается только письменно согласованный новый объём. Для старта — аванс 30% ($2 850).</span>
+    </p>
+  </div>
+
+  <h3 class="head" style="margin-top:34px;font-size:19px"><span class="uz">Opsional modullar</span><span class="ru">Опциональные модули</span></h3>
+  <div class="addons" id="addonList"></div>
+  <div class="addsum">
+    <span class="uz">Tanlangan opsiyalar bilan jami</span><span class="ru">Итого с выбранными опциями</span>
+    <b id="grandTotal">$9 500</b>
+  </div>
+</section>
+
+<section>
+  <h2><span class="idx">04</span><span class="uz">Muddatlar</span><span class="ru">Сроки</span></h2>
+  <h3 class="head"><span class="uz">8 hafta: 6 hafta ishlab chiqish + 2 hafta test va pilot</span><span class="ru">8 недель: 6 недель разработки + 2 недели теста и пилота</span></h3>
+  <div class="gantt">
+    <div class="gantt-in">
+      <div class="gantt-head">
+        <div><span class="uz">Faza</span><span class="ru">Фаза</span></div>
+        <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>
+      </div>
+      <div id="ganttRows"></div>
+    </div>
+  </div>
+  <p class="prose" style="margin-top:12px">
+    <span class="uz">Jamoa: bitta biznes-analitik va bitta AI-injener; pik yuklama 3–6-haftalarga toʻgʻri keladi. Test avval ichkarida, keyin mijozlarning kichik qismida, soʻng toʻliq ishga tushirish.</span>
+    <span class="ru">Команда: один бизнес-аналитик и один AI-инженер; пик нагрузки — 3–6 недели. Тест сначала внутренний, затем на небольшой части клиентов, потом полный запуск.</span>
+  </p>
+</section>
+
+<section>
+  <h2><span class="idx">05</span><span class="uz">Narxga kirmaydi</span><span class="ru">Не входит в стоимость</span></h2>
+  <h3 class="head"><span class="uz">Mijoz tomonidagi xarajatlar</span><span class="ru">Расходы на стороне клиента</span></h3>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="uz">Modda</span><span class="ru">Статья</span></th>
+          <th class="n"><span class="uz">Taxminiy</span><span class="ru">Ориентировочно</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="uz">MacBook — agent doimiy ulanib turadigan qurilma</span><span class="ru">MacBook — устройство, на котором агент постоянно на связи</span><span class="sub"><span class="uz">Uchrashuvda aytilgan taxmin</span><span class="ru">Оценка озвучена на встрече</span></span></td><td class="n">~$1 000</td></tr>
+        <tr><td><span class="uz">Akkumulyator / UPS — svet oʻchganda Wi-Fi va qurilma ishlab tursin</span><span class="ru">Аккумулятор / ИБП — чтобы Wi-Fi и устройство работали при отключении света</span></td><td class="n"><span class="uz">bozor narxi</span><span class="ru">по рынку</span></td></tr>
+        <tr><td><span class="uz">Agentlar uchun SIM karta va Telegram akkaunt</span><span class="ru">SIM-карта и Telegram-аккаунт для агентов</span></td><td class="n"><span class="uz">minimal</span><span class="ru">минимально</span></td></tr>
+        <tr><td><span class="uz">Ibox obunasi va Ibox tomonidan integratsiya uchun olinadigan toʻlov</span><span class="ru">Подписка Ibox и оплата интеграции со стороны Ibox</span><span class="sub"><span class="uz">Ibox bilan alohida kelishiladi</span><span class="ru">Согласуется с Ibox отдельно</span></span></td><td class="n"><span class="uz">Ibox narxi</span><span class="ru">по Ibox</span></td></tr>
+        <tr><td><span class="uz">AI model (LLM) sarfi — xabarlar hajmiga bogʻliq</span><span class="ru">Расход на AI-модель (LLM) — зависит от объёма сообщений</span><span class="sub"><span class="uz">Aniq raqam pilotdan keyin maʼlum boʻladi; boshlangʻich baho</span><span class="ru">Точная цифра — после пилота; предварительная оценка</span></span></td><td class="n">$60–150 / <span class="uz">oy</span><span class="ru">мес</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel" style="margin-top:14px">
+    <h5><span class="uz">Ishga tushgandan keyin: servis</span><span class="ru">После запуска: сервис</span></h5>
+    <p class="prose" style="margin:0">
+      <span class="uz">Birinchi <strong>30 kun — bepul kafolat</strong>: xatolar va sozlamalar bizning hisobimizdan. Keyin ixtiyoriy servis paketi — <strong>oyiga 16 soat ($400)</strong>: monitoring, skript va qoidalarni sozlash, yangi SKU va mijozlarni qoʻshish, oylik hisobot. Kerak boʻlmasa — soatbay chaqiruv boʻyicha.</span>
+      <span class="ru">Первые <strong>30 дней — бесплатная гарантия</strong>: ошибки и донастройка за наш счёт. Далее — необязательный сервисный пакет <strong>16 часов в месяц ($400)</strong>: мониторинг, настройка скриптов и правил, добавление новых SKU и клиентов, ежемесячный отчёт. Не нужен — работаем почасово по запросу.</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="idx">06</span><span class="uz">Iqtisodiy asos</span><span class="ru">Экономика</span></h2>
+  <h3 class="head"><span class="uz">Qoplanish muddati — taxminan 10 oy</span><span class="ru">Окупаемость — около 10 месяцев</span></h3>
+  <div class="roi">
+    <div class="roicell"><div class="k"><span class="uz">Yillik tejash<br>(mijoz bahosi)</span><span class="ru">Годовая экономия<br>(оценка клиента)</span></div><div class="v">$15 600</div></div>
+    <div class="roicell"><div class="k"><span class="uz">Loyiha<br>(bir martalik)</span><span class="ru">Проект<br>(разово)</span></div><div class="v">$9 500</div></div>
+    <div class="roicell"><div class="k"><span class="uz">Servis<br>(11 oy &times; $400)</span><span class="ru">Сервис<br>(11 мес &times; $400)</span></div><div class="v">$4 400</div></div>
+    <div class="roicell good"><div class="k"><span class="uz">2-yildan boshlab<br>sof tejash</span><span class="ru">Со 2-го года<br>чистая экономия</span></div><div class="v">$10 800</div></div>
+  </div>
+  <div class="panel">
+    <p class="prose">
+      <span class="uz">Hisob uchrashuvda siz aytgan raqamlarga asoslangan: bu ishni odam bilan yopish uchun kamida ikkita sotuvchi kerak, ular oyiga taxminan <strong>$1 300</strong> turadi — yiliga <strong>$15 600</strong>. Birinchi yilda loyiha va servis $13 900 boʻladi, yaʼni sof natija ozgina musbat; qoplanish nuqtasi <strong>~10-oy</strong>ga toʻgʻri keladi. Ikkinchi yildan boshlab yiliga taxminan <strong>$10 800</strong> qoladi.</span>
+      <span class="ru">Расчёт основан на цифрах, названных вами на встрече: чтобы закрыть эту работу людьми, нужны минимум два продавца стоимостью около <strong>$1 300</strong> в месяц — <strong>$15 600</strong> в год. В первый год проект и сервис составят $13 900, то есть чистый результат слегка положительный; точка окупаемости — <strong>около 10-го месяца</strong>. Со второго года остаётся примерно <strong>$10 800</strong> в год.</span>
+    </p>
+    <p class="prose" style="margin-bottom:0">
+      <span class="uz">Bu hisobga <em>kirmagan</em>, lekin real qiymat beradigan narsalar: kechasi va dam olish kunlari qabul qilinadigan zakazlar, bir vaqtning oʻzida 30–100 mijoz bilan ishlash, javob kutib ketib qolgan mijozlar, va sizning shaxsiy vaqtingiz. Raqamlar mijozning oʻz baholari asosida — kafolatlangan daromad emas.</span>
+      <span class="ru">В расчёт <em>не включено</em>, но даёт реальную ценность: заказы ночью и в выходные, работа одновременно с 30–100 клиентами, клиенты, ушедшие из-за ожидания ответа, и ваше личное время. Цифры — оценки клиента, а не гарантированный доход.</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="idx">07</span><span class="uz">Risk va shartlar</span><span class="ru">Риски и условия</span></h2>
+  <h3 class="head"><span class="uz">Bitta kritik bogʻliqlik bor</span><span class="ru">Есть одна критическая зависимость</span></h3>
+  <div class="panel warn">
+    <h5><span class="uz">Iboxga maʼlumot yozish (qoralama zakaz)</span><span class="ru">Запись данных в Ibox (черновик заказа)</span></h5>
+    <p class="prose">
+      <span class="uz">Iboxdan maʼlumot <em>olish</em> muammo emas. Savol — u yerga <em>yozish</em>: zakazni mijoz nomiga qoralama qilib kiritish. Uchrashuvda koʻrsatilgan bron zakaz boti aynan shu yoʻlni ochib turibdi, shuning uchun ehtimol yuqori, lekin <strong>1-haftada rasman tasdiqlanadi</strong>.</span>
+      <span class="ru">Читать данные из Ibox — не проблема. Вопрос в <em>записи</em>: внести заказ черновиком на имя клиента. Показанный на встрече бот бронь-заказов открывает именно этот путь, поэтому вероятность высокая, но <strong>подтверждаем официально на 1-й неделе</strong>.</span>
+    </p>
+    <p class="prose" style="margin-bottom:0">
+      <span class="uz"><strong>Agar Ibox ham API, ham bot orqali yozishga ruxsat bermasa:</strong> zakazni oʻz modulimizda yigʻamiz va Iboxga eksport qilinadigan koʻrinishda beramiz — bu opsional modul sifatida quyida hisoblangan (96 soat). Bu holatda 1-haftadan keyin toʻxtab, birga qaror qabul qilamiz — avans qaytariladi yoki yangi hajmga oʻtkaziladi.</span>
+      <span class="ru"><strong>Если Ibox не даст записывать ни через API, ни через бота:</strong> собираем заказ в собственном модуле и отдаём в формате, пригодном для загрузки в Ibox — это посчитано ниже как опциональный модуль (96 часов). В таком случае после 1-й недели останавливаемся и решаем вместе — аванс возвращается или переносится в новый объём.</span>
+    </p>
+  </div>
+
+  <div class="two" style="margin-top:12px">
+    <div class="panel">
+      <h5><span class="uz">Biz kafolatlaymiz</span><span class="ru">Мы гарантируем</span></h5>
+      <ul class="plain">
+        <li><span class="uz">Agent faqat mavjud, aniq mijozlar bilan ishlaydi — sovuq lidlar yoʻq.</span><span class="ru">Агент работает только с действующими клиентами — никаких холодных лидов.</span></li>
+        <li><span class="uz">Narx faqat Iboxdan olinadi, agent narx oʻylab topmaydi.</span><span class="ru">Цена берётся только из Ibox, агент цены не выдумывает.</span></li>
+        <li><span class="uz">Zakaz qoralama boʻlib tushadi — yakuniy tasdiq odam qoʻlida.</span><span class="ru">Заказ попадает черновиком — финальное подтверждение за человеком.</span></li>
+        <li><span class="uz">Har bir suhbat va yuborilgan xabar loglanadi.</span><span class="ru">Каждый диалог и отправленное сообщение логируются.</span></li>
+        <li><span class="uz">Kod va maʼlumot bazasi mijozniki.</span><span class="ru">Код и база данных принадлежат клиенту.</span></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h5><span class="uz">Mijozdan kerak</span><span class="ru">Требуется от клиента</span></h5>
+      <ul class="plain">
+        <li><span class="uz">Ibox’ga kirish huquqi va Ibox tomonidan integratsiya tasdigʻi.</span><span class="ru">Доступ к Ibox и подтверждение интеграции со стороны Ibox.</span></li>
+        <li><span class="uz">SKU ↔ taʼminotchi jadvali va minimal qoldiq normalari.</span><span class="ru">Таблица SKU ↔ поставщик и нормы минимального остатка.</span></li>
+        <li><span class="uz">Mijozlar roʻyxati: kod, qulay kun/soat, qarz limiti, narx darajasi.</span><span class="ru">Список клиентов: код, удобные дни/часы, лимит долга, уровень цены.</span></li>
+        <li><span class="uz">Suhbat shablonlari va muloqot uslubi (bir marta, birgalikda).</span><span class="ru">Шаблоны диалогов и тон общения (один раз, совместно).</span></li>
+        <li><span class="uz">Qurilma, SIM va Telegram akkaunt; qaror qabul qiluvchi bitta mas’ul shaxs.</span><span class="ru">Устройство, SIM и Telegram-аккаунт; одно ответственное лицо для решений.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:12px">
+    <h5><span class="uz">Qabul mezonlari — pilot oxirida tekshiriladi</span><span class="ru">Критерии приёмки — проверяются в конце пилота</span></h5>
+    <ul class="plain">
+      <li><span class="uz">20 ta SKU boʻyicha 7 kun davomida avto-zakaz xatosiz ishlaydi.</span><span class="ru">По 20 SKU автозаказ 7 дней работает без ошибок.</span></li>
+      <li><span class="uz">50 ta test zakazining 100% i Iboxga toʻgʻri mijoz nomiga qoralama boʻlib tushadi.</span><span class="ru">100% из 50 тестовых заказов попадают в Ibox черновиком на нужного клиента.</span></li>
+      <li><span class="uz">30 ta test dialogida narx va tovar nomi kamida 95% toʻgʻri.</span><span class="ru">В 30 тестовых диалогах цена и наименование верны минимум в 95% случаев.</span></li>
+      <li><span class="uz">Mijozga oʻrtacha javob vaqti 60 soniyadan kam.</span><span class="ru">Среднее время ответа клиенту — менее 60 секунд.</span></li>
+      <li><span class="uz">Qarz limiti oshgan mijozga zakaz ochilmaydi (test qilinadi).</span><span class="ru">Клиенту с превышенным лимитом долга заказ не открывается (проверяется тестом).</span></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="idx">08</span><span class="uz">Keyingi qadam</span><span class="ru">Следующий шаг</span></h2>
+  <div class="panel note">
+    <p class="prose" style="margin:0">
+      <span class="uz">Ushbu taklif tasdiqlangach, birinchi hafta Ibox bilan yozish imkoniyatini rasman tekshirishdan boshlanadi — javob musbat boʻlsa, keyingi kun ishlab chiqishga oʻtamiz. Avans faqat shu tekshiruvdan keyin talab qilinadi.</span>
+      <span class="ru">После согласования предложения первая неделя начинается с официальной проверки записи в Ibox — при положительном ответе на следующий день переходим к разработке. Аванс запрашивается только после этой проверки.</span>
+    </p>
+  </div>
+
+  <div class="sign">
+    <div>
+      <div class="who">
+        <b><span class="uz">Ijrochi</span><span class="ru">Исполнитель</span></b>
+        Javokhir K.<br>
+        <a href="mailto:javokhir.k@alliancevs.io">javokhir.k@alliancevs.io</a>
+      </div>
+      <div class="sigline"></div>
+      <div class="siglabel"><span class="uz">Imzo / sana</span><span class="ru">Подпись / дата</span></div>
+    </div>
+    <div>
+      <div class="who">
+        <b><span class="uz">Buyurtmachi</span><span class="ru">Заказчик</span></b>
+        Confido<br>
+        <span class="uz">Biznes egasi</span><span class="ru">Владелец бизнеса</span>
+      </div>
+      <div class="sigline"></div>
+      <div class="siglabel"><span class="uz">Imzo / sana</span><span class="ru">Подпись / дата</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="uz">Taklif 30.09.2026 gacha amal qiladi. Soatlar baholangan hajm boʻlib, hisob-faktura haqiqiy ishlangan vaqt boʻyicha, 380 soatlik yuqori chegara bilan chiqariladi. Iqtisodiy hisoblar uchrashuvda buyurtmachi tomonidan aytilgan raqamlarga asoslangan va kafolat hisoblanmaydi.</span>
+    <span class="ru">Предложение действует до 30.09.2026. Часы — оценка объёма; счёт выставляется по фактически отработанному времени с верхней границей 380 часов. Экономические расчёты основаны на цифрах, названных заказчиком на встрече, и не являются гарантией.</span>
+  </footer>
+</section>
+</div>
+
+<script>
+const RATE = 25;
+
+const PHASES = [
+  {i:'1', uz:'Discovery va integratsiya auditi',            ru:'Дискавери и аудит интеграции',
+   duz:'Ibox’ning oʻqish/yozish imkoniyatini tekshirish, jarayonlarni yozib olish, maʼlumot modeli, texnik topshiriq va qabul mezonlari',
+   dru:'Проверка чтения/записи Ibox, фиксация процессов, модель данных, техзадание и критерии приёмки', h:56, span:[1,1]},
+  {i:'2', uz:'Integratsiya qatlami va platforma',           ru:'Слой интеграции и платформа',
+   duz:'Ibox konnektori, Telegram qatlami, maʼlumot bazasi, sinxronizatsiya, xatoliklarni qayta urinish, log va audit',
+   dru:'Коннектор Ibox, слой Telegram, база данных, синхронизация, ретраи, логи и аудит', h:80, span:[2,2]},
+  {i:'3', uz:'Agent 1 — Zakupchik',                          ru:'Агент 1 — Закупщик',
+   duz:'Minimal qoldiq qoidalari, SKU↔taʼminotchi jadvali, avtomatik zakaz, tasdiq kuzatuvi, kunlik digest',
+   dru:'Правила минимального остатка, таблица SKU↔поставщик, автозаказ, контроль подтверждения, дайджест', h:60, span:[3,2]},
+  {i:'4', uz:'Agent 2 — Sotuvchi',                           ru:'Агент 2 — Продавец',
+   duz:'Mijoz kartalari, jadval boʻyicha aloqa, taklif va narx, zakazni Iboxga qoralama qilib kiritish, limitlar, odamga uzatish',
+   dru:'Карточки клиентов, контакт по расписанию, предложение и цены, черновик заказа в Ibox, лимиты, передача человеку', h:100, span:[4,3]},
+  {i:'5', uz:'Test va pilot',                                ru:'Тест и пилот',
+   duz:'Ichki test stsenariylari, mijozlarning kichik qismida pilot, sozlash va tuning',
+   dru:'Внутренние тест-сценарии, пилот на части клиентов, донастройка и тюнинг', h:60, span:[7,2]},
+  {i:'6', uz:'Ishga tushirish, oʻqitish, hujjat',            ru:'Запуск, обучение, документация',
+   duz:'Cloudga joylashtirish, monitoring, zaxira nusxa, 2 ta oʻquv sessiyasi, boshqaruv qoʻllanmasi',
+   dru:'Размещение в облаке, мониторинг, бэкапы, 2 обучающие сессии, руководство администратора', h:24, span:[8,1]}
+];
+
+const BONUS = {uz:'Agent 3 — Assistent (finansist/marketolog)', ru:'Агент 3 — Ассистент (финансист/маркетолог)',
+  duz:'Uchrashuvdagi kelishuvga koʻra narxga kiritilmaydi', dru:'По договорённости на встрече в стоимость не входит', h:40, span:[6,1]};
+
+const ADDONS = [
+  {id:'a1', uz:'Ibox yozishga ruxsat bermasa — mustaqil buyurtma moduli',
+          ru:'Если Ibox не даст запись — собственный модуль заказов',
+   duz:'Zakazni oʻzimizda yigʻish, admin panel, Iboxga eksport fayli',
+   dru:'Сбор заказов у нас, админ-панель, файл экспорта в Ibox', h:96},
+  {id:'a2', uz:'Optom narx segmenti va avtomatik chegirmalar',
+          ru:'Оптовый сегмент цен и автоматические скидки',
+   duz:'Ikkinchi narx darajasi, hajmga qarab chegirma qoidalari',
+   dru:'Второй уровень цен, правила скидок от объёма', h:32},
+  {id:'a3', uz:'Qoʻshimcha filialni ulash (har biri)',
+          ru:'Подключение дополнительного филиала (за каждый)',
+   duz:'Alohida ombor qoldigʻi, alohida taʼminotchi jadvali',
+   dru:'Отдельные остатки склада, отдельная таблица поставщиков', h:24},
+  {id:'a4', uz:'Ovozli xabarlarni tushunish (Telegram voice)',
+          ru:'Распознавание голосовых сообщений (Telegram voice)',
+   duz:'Mijoz ovozli yozganda zakazni matnga oʻgirib qabul qilish',
+   dru:'Приём заказа, надиктованного голосом, с расшифровкой в текст', h:40}
+];
+
+const money = n => '$' + n.toLocaleString('en-US').replace(/,/g,' ');
+const bi = (u, r) => '<span class="uz">' + u + '</span><span class="ru">' + r + '</span>';
+
+const baseHours = PHASES.reduce((s,p) => s + p.h, 0);
+const basePrice = baseHours * RATE;
+
+document.getElementById('phaseBody').innerHTML =
+  PHASES.map(p => '<tr><td class="phase-i">' + p.i + '</td><td><strong>' + bi(p.uz,p.ru) +
+    '</strong><span class="sub">' + bi(p.duz,p.dru) + '</span></td><td class="n">' + p.h +
+    '</td><td class="n">' + money(p.h*RATE) + '</td></tr>').join('') +
+  '<tr class="free"><td class="phase-i">&plus;</td><td><strong>' + bi(BONUS.uz,BONUS.ru) +
+    '</strong><span class="sub">' + bi(BONUS.duz,BONUS.dru) + '</span></td><td class="n">' + BONUS.h +
+    '</td><td class="n"><span class="strike">' + money(BONUS.h*RATE) + '</span>$0</td></tr>' +
+  '<tr class="total"><td></td><td>' + bi('Jami toʻlanadigan','Итого к оплате') +
+    '</td><td class="n">' + baseHours + '</td><td class="n">' + money(basePrice) + '</td></tr>';
+
+document.getElementById('addonList').innerHTML = ADDONS.map(a =>
+  '<label class="addon"><input type="checkbox" data-h="' + a.h + '"><span><span class="t">' +
+  bi(a.uz,a.ru) + '</span><span class="d">' + bi(a.duz,a.dru) + '</span></span><span class="p">' +
+  a.h + ' ' + bi('soat','ч') + '<b>' + money(a.h*RATE) + '</b></span></label>').join('');
+
+document.getElementById('ganttRows').innerHTML =
+  PHASES.concat([{i:'+', uz:BONUS.uz, ru:BONUS.ru, span:BONUS.span, bonus:true}]).map(p => {
+    let cells = '';
+    for (let w = 1; w <= 8; w++) {
+      const on = w >= p.span[0] && w < p.span[0] + p.span[1];
+      cells += '<div style="padding:0 3px">' + (on ? '<div class="gbar' + (p.bonus ? ' soft' : '') + '"></div>' : '') + '</div>';
+    }
+    return '<div class="gantt-row"><div class="lbl">' + p.i + '. ' + bi(p.uz,p.ru) +
+           '</div><div class="track">' + cells + '</div></div>';
+  }).join('');
+
+const statHours = document.getElementById('statHours');
+const statPrice = document.getElementById('statPrice');
+const grand = document.getElementById('grandTotal');
+const barTotal = document.getElementById('barTotal');
+
+function recalc() {
+  let extra = 0;
+  document.querySelectorAll('#addonList input:checked').forEach(c => extra += +c.dataset.h);
+  const h = baseHours + extra, p = h * RATE;
+  statHours.firstChild.nodeValue = h + ' ';
+  statPrice.textContent = money(p);
+  grand.textContent = money(p);
+  barTotal.textContent = money(p);
+}
+document.getElementById('addonList').addEventListener('change', recalc);
+recalc();
+
+const buttons = document.querySelectorAll('.lang button');
+buttons.forEach(b => b.addEventListener('click', () => {
+  const l = b.dataset.set;
+  document.documentElement.setAttribute('data-l', l);
+  document.documentElement.lang = l === 'ru' ? 'ru' : 'uz';
+  buttons.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  try { localStorage.setItem('confido-offer-lang', l); } catch (e) {}
+}));
+try {
+  const saved = localStorage.getItem('confido-offer-lang');
+  if (saved === 'ru') document.querySelector('.lang button[data-set="ru"]').click();
+} catch (e) {}
+document.documentElement.setAttribute('data-l', document.documentElement.getAttribute('data-l') || 'uz');
+</script>
+</body>
+</html>
