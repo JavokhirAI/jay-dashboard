@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow,noarchive" />
+<meta http-equiv="cache-control" content="no-cache" />
+<title>JOS — Файлы</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #141821;
+    --panel-2: #1a1f2b;
+    --line: #262c3a;
+    --text: #e8eaf0;
+    --muted: #8b93a7;
+    --accent: #7c3aed;
+    --accent-soft: rgba(124, 58, 237, 0.16);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -0.2px; }
+  .sub { color: var(--muted); font-size: 13px; }
+
+  /* gate */
+  #gate { max-width: 380px; margin: 14vh auto; text-align: center; }
+  #gate .lock { font-size: 34px; margin-bottom: 14px; }
+  #gate p { color: var(--muted); font-size: 13px; margin: 0 0 18px; }
+  input[type="password"], input[type="search"] {
+    width: 100%; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--text);
+    font-size: 14px; outline: none;
+  }
+  input:focus { border-color: var(--accent); }
+  button {
+    background: var(--accent); color: #fff; border: 0; border-radius: 10px;
+    padding: 12px 16px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: 0.55; cursor: default; }
+  .remember { display: flex; align-items: center; justify-content: center; gap: 7px; color: var(--muted); font-size: 12.5px; margin: 12px 0 16px; }
+  .err { color: #f87171; font-size: 13px; min-height: 18px; margin-top: 12px; }
+
+  /* controls */
+  .controls { display: flex; gap: 10px; margin: 20px 0 14px; flex-wrap: wrap; }
+  .controls input[type="search"] { flex: 1 1 240px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--panel); color: var(--muted); font-size: 12.5px; cursor: pointer; user-select: none;
+  }
+  .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+
+  /* list */
+  .day { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; margin: 26px 0 10px; }
+  .item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 13px 15px; margin-bottom: 8px;
+  }
+  .item:hover { border-color: #34405a; }
+  .kind {
+    flex: 0 0 auto; font-size: 10.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 6px; background: var(--panel-2); color: var(--muted); margin-top: 2px;
+  }
+  .kind[data-k="html"], .kind[data-k="artifact"] { color: #c4b5fd; background: rgba(124,58,237,.18); }
+  .kind[data-k="word"] { color: #93c5fd; background: rgba(59,130,246,.15); }
+  .kind[data-k="pdf"] { color: #fca5a5; background: rgba(239,68,68,.14); }
+  .kind[data-k="sheet"] { color: #86efac; background: rgba(34,197,94,.14); }
+  .kind[data-k="slides"] { color: #fdba74; background: rgba(249,115,22,.14); }
+  .body { min-width: 0; flex: 1; }
+  .title { font-weight: 600; font-size: 14.5px; word-break: break-word; }
+  .title a { color: var(--text); text-decoration: none; }
+  .title a:hover { color: #c4b5fd; text-decoration: underline; }
+  .loc {
+    color: var(--muted); font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    word-break: break-all; margin-top: 3px;
+  }
+  .note { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+  .meta { color: #5f6779; font-size: 11.5px; margin-top: 5px; }
+  .copy {
+    flex: 0 0 auto; background: transparent; border: 1px solid var(--line); color: var(--muted);
+    padding: 5px 9px; font-size: 11.5px; font-weight: 500; border-radius: 7px; margin-top: 2px;
+  }
+  .copy:hover { color: var(--text); border-color: var(--accent); }
+  .empty { color: var(--muted); text-align: center; padding: 48px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="gate">
+    <div class="lock">🔒</div>
+    <p>Реестр файлов JOS зашифрован. Введите пароль JOS.</p>
+    <input id="pass" type="password" autocomplete="current-password" placeholder="Пароль" />
+    <label class="remember"><input id="remember" type="checkbox" checked /> запомнить в этом браузере</label>
+    <button id="unlock">Открыть</button>
+    <div class="err" id="err"></div>
+  </div>
+
+  <main id="app" hidden>
+    <header>
+      <h1>Файлы</h1>
+      <span class="sub" id="stat"></span>
+    </header>
+    <div class="sub">Всё, что создаётся в сессиях Claude — HTML, Word, PDF, таблицы, опубликованные артефакты.</div>
+
+    <div class="controls">
+      <input id="q" type="search" placeholder="Поиск по названию, пути, ссылке…" />
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div id="list"></div>
+  </main>
+</div>
+
+<script>
+const REGISTRY_URL = 'files/registry.enc.json';
+const STORE_KEY = 'jos.files.pass';
+const KIND_LABELS = { html: 'HTML', word: 'WORD', pdf: 'PDF', sheet: 'TABLE', slides: 'DECK', artifact: 'ARTIFACT', link: 'LINK', note: 'NOTE', file: 'FILE' };
+
+const $ = (id) => document.getElementById(id);
+let entries = [];
+let activeKinds = new Set();
+
+async function deriveKey(pass, saltB64, iterations) {
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: b64(saltB64), iterations, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+  );
+}
+
+function b64(s) {
+  const bin = atob(s);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+async function loadRegistry(pass) {
+  const res = await fetch(REGISTRY_URL + '?t=' + Date.now(), { cache: 'no-store' });
+  if (res.status === 404) return { entries: [], updated: null };
+  if (!res.ok) throw new Error('Не удалось загрузить реестр (' + res.status + ')');
+  const blob = await res.json();
+  const key = await deriveKey(pass, blob.kdf.salt, blob.kdf.iterations);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(blob.iv) }, key, b64(blob.data));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function fmtSize(n) {
+  if (!n) return '';
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return Math.round(n / 1024) + ' KB';
+  return (n / 1048576).toFixed(1) + ' MB';
+}
+
+function dayLabel(iso) {
+  const d = new Date(iso);
+  const today = new Date();
+  const yday = new Date(Date.now() - 86400000);
+  const same = (a, b) => a.toDateString() === b.toDateString();
+  if (same(d, today)) return 'Сегодня';
+  if (same(d, yday)) return 'Вчера';
+  return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function render() {
+  const q = $('q').value.trim().toLowerCase();
+  const shown = entries.filter((e) => {
+    if (activeKinds.size && !activeKinds.has(e.kind)) return false;
+    if (!q) return true;
+    return [e.title, e.path, e.url, e.note, e.project].filter(Boolean).join(' ').toLowerCase().includes(q);
+  });
+
+  const list = $('list');
+  list.innerHTML = '';
+  if (!shown.length) {
+    list.innerHTML = '<div class="empty">' + (entries.length ? 'Ничего не найдено.' : 'Реестр пока пуст — он заполнится при следующем созданном файле.') + '</div>';
+    return;
+  }
+
+  let day = null;
+  for (const e of shown) {
+    const d = dayLabel(e.updated || e.ts);
+    if (d !== day) {
+      day = d;
+      const h = document.createElement('div');
+      h.className = 'day';
+      h.textContent = d;
+      list.appendChild(h);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'item';
+
+    const kind = document.createElement('span');
+    kind.className = 'kind';
+    kind.dataset.k = e.kind;
+    kind.textContent = KIND_LABELS[e.kind] || e.kind.toUpperCase();
+
+    const body = document.createElement('div');
+    body.className = 'body';
+
+    const title = document.createElement('div');
+    title.className = 'title';
+    if (e.url) {
+      const a = document.createElement('a');
+      a.href = e.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = e.title;
+      title.appendChild(a);
+    } else {
+      title.textContent = e.title;
+    }
+
+    const loc = document.createElement('div');
+    loc.className = 'loc';
+    loc.textContent = e.url || e.path || '';
+
+    body.append(title, loc);
+
+    if (e.note) {
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = e.note;
+      body.appendChild(note);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = [
+      new Date(e.updated || e.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+      e.project, e.repo && e.branch ? e.branch : null, fmtSize(e.size), e.source,
+    ].filter(Boolean).join(' · ');
+    body.appendChild(meta);
+
+    const copy = document.createElement('button');
+    copy.className = 'copy';
+    copy.textContent = 'копировать';
+    copy.onclick = async () => {
+      await navigator.clipboard.writeText(e.url || e.path || '');
+      copy.textContent = 'скопировано';
+      setTimeout(() => { copy.textContent = 'копировать'; }, 1400);
+    };
+
+    row.append(kind, body, copy);
+    list.appendChild(row);
+  }
+}
+
+function buildChips() {
+  const counts = {};
+  for (const e of entries) counts[e.kind] = (counts[e.kind] || 0) + 1;
+  const chips = $('chips');
+  chips.innerHTML = '';
+  for (const [k, n] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.setAttribute('aria-pressed', 'false');
+    chip.textContent = (KIND_LABELS[k] || k) + ' ' + n;
+    chip.onclick = () => {
+      const on = chip.getAttribute('aria-pressed') === 'true';
+      chip.setAttribute('aria-pressed', String(!on));
+      if (on) activeKinds.delete(k); else activeKinds.add(k);
+      render();
+    };
+    chips.appendChild(chip);
+  }
+}
+
+async function open(pass, remember) {
+  const reg = await loadRegistry(pass);
+  entries = (reg.entries || []).sort((a, b) => (b.updated || b.ts).localeCompare(a.updated || a.ts));
+  if (remember) localStorage.setItem(STORE_KEY, pass);
+  $('gate').hidden = true;
+  $('app').hidden = false;
+  $('stat').textContent = entries.length + ' записей' + (reg.updated ? ' · обновлено ' + new Date(reg.updated).toLocaleString('ru-RU') : '');
+  buildChips();
+  render();
+
+  // Keep the page live: the registry is rewritten by hooks as sessions run.
+  setInterval(async () => {
+    try {
+      const fresh = await loadRegistry(pass);
+      if ((fresh.entries || []).length !== entries.length) {
+        entries = fresh.entries.sort((a, b) => (b.updated || b.ts).localeCompare(a.updated || a.ts));
+        $('stat').textContent = entries.length + ' записей · обновлено ' + new Date(fresh.updated).toLocaleString('ru-RU');
+        buildChips();
+        render();
+      }
+    } catch { /* offline — try again next tick */ }
+  }, 60000);
+}
+
+async function attempt(pass, remember) {
+  $('err').textContent = '';
+  $('unlock').disabled = true;
+  try {
+    await open(pass, remember);
+  } catch (e) {
+    localStorage.removeItem(STORE_KEY);
+    $('err').textContent = e instanceof Error && /реестр/i.test(e.message) ? e.message : 'Неверный пароль.';
+  } finally {
+    $('unlock').disabled = false;
+  }
+}
+
+$('unlock').onclick = () => attempt($('pass').value, $('remember').checked);
+$('pass').onkeydown = (e) => { if (e.key === 'Enter') $('unlock').click(); };
+$('q').oninput = render;
+
+const saved = localStorage.getItem(STORE_KEY);
+if (saved) attempt(saved, true);
+</script>
+</body>
+</html>
